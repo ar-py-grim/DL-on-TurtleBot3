@@ -8,9 +8,9 @@ export TURTLEBOT3_MODEL=burger
 ```
 U can even use other models
 
-**To run the project**
+## To run the project
 
-### During Training
+** During Training **
 1. First launch the Gazebo map
 ```sh
 ros2 launch turtlebot3_gazebo turtlebot3_dqn_{$stage_num}.launch.py
