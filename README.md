@@ -47,8 +47,10 @@ ros2 run turtlebot3_dqn dqn_environment
 ```
 4. Test traind model 
 ```sh
-ros2 run turtlebot3_dqn ddqn_test {$stage_num}
+ros2 run turtlebot3_dqn dqn_test {$stage_num}
 ```
+
+Follow the same steps for DDQN as well
 
 ## References
 Git repo of turtlebot3 Machine Learnning link https://github.com/ROBOTIS-GIT/turtlebot3_machine_learning/tree/humble
