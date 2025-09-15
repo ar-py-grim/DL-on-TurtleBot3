@@ -1,6 +1,12 @@
 # DL-on-TurtleBot3
 DQN and DDQN algo on turtlebot3
 
+## Note!
+To run the desired turtlebot model source the below line in u .bashrc file
+```sh
+export TURTLEBOT3_MODEL=burger
+```
+U can even use other models
 
 **To run the project**
 
