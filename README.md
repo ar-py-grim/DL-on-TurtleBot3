@@ -1,6 +1,13 @@
 # DL-on-TurtleBot3
 DQN and DDQN algo on turtlebot3
 
+# Software versions
+1. Python version = 3.10.12
+2. pyqtgraph version = 0.13.7
+3. PyQt5 version = 5.15.6
+4. Tensorflow, Keras version = 2.10.0
+5. numpy version = 1.26.4
+   
 ## Note!
 To run the desired turtlebot model source the below line in u .bashrc file
 ```sh
