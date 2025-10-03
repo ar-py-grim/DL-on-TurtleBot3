@@ -9,7 +9,7 @@ DQN and DDQN algo on turtlebot3
 5. Numpy version = 1.26.4
    
 ## Note!
-To run the desired turtlebot model source the below line in u .bashrc file
+To run the desired turtlebot model source the below line in your .bashrc file
 ```sh
 export TURTLEBOT3_MODEL=burger
 ```
