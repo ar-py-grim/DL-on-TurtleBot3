@@ -19,7 +19,7 @@ export TURTLEBOT3_MODEL=burger
 ### During Training
 1. First launch the Gazebo map
 ```sh
-ros2 launch turtlebot3_gazebo turtlebot3_dqn_{$stage_num}.launch.py
+ros2 launch turtlebot3_gazebo turtlebot3_dqn_world_stage{$stage_num}.launch.py
 ```
 
 2. Run Gazebo environment node
