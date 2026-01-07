@@ -36,7 +36,7 @@ setup(
     license='Apache License, Version 2.0',
     entry_points={
         'console_scripts': [
-            'dqn_train = turtlebot3_dqn.dqn_train:main',
+            'dqn_agent = turtlebot3_dqn.dqn_agent:main',
             'dqn_test = turtlebot3_dqn.dqn_test:main',
             'ddqn_train = turtlebot3_dqn.ddqn_train:main',
             'ddqn_test = turtlebot3_dqn.ddqn_test:main',
