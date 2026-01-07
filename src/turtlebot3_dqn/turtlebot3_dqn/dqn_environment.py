@@ -1,3 +1,5 @@
+#!/dl_env/bin/env python3
+
 #################################################################################
 # Copyright 2019 ROBOTIS CO., LTD.
 #
@@ -28,6 +30,7 @@ from rclpy.qos import QoSProfile
 from sensor_msgs.msg import LaserScan
 from std_srvs.srv import Empty
 from turtlebot3_msgs.srv import Dqn,Goal
+from pathlib import Path
 
 class RLEnvironment(Node):
     def __init__(self):

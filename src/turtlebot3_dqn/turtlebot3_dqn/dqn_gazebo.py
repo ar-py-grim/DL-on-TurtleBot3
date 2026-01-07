@@ -1,3 +1,5 @@
+#!/dl_env/bin/env python3
+
 #################################################################################
 # Copyright 2019 ROBOTIS CO., LTD.
 #
@@ -42,9 +44,6 @@ class GazeboInterface(Node):
 
         self.entity_pose_x = 0.5
         self.entity_pose_y = 0.0
-
-        # testing
-        self.goal_pose_index = 0
 
         self.delete_entity_client = self.create_client(DeleteEntity, 'delete_entity')
         self.spawn_entity_client = self.create_client(SpawnEntity, 'spawn_entity')

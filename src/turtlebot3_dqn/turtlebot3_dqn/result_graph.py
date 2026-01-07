@@ -1,3 +1,5 @@
+#!/dl_env/bin/env python3
+
 #################################################################################
 # Copyright 2018 ROBOTIS CO., LTD.
 #
@@ -33,13 +35,7 @@ class GraphSubscriber(Node):
         super().__init__('graph')
 
         self.window = window
-
-        self.subscription = self.create_subscription(
-            Float32MultiArray,
-            '/result',
-            self.data_callback,
-            10
-        )
+        self.subscription = self.create_subscription(Float32MultiArray,'/result',self.data_callback,10)
         self.subscription
 
     def data_callback(self, msg):
@@ -62,9 +58,7 @@ class Window(QMainWindow):
         self.plot()
 
         self.ros_subscriber = GraphSubscriber(self)
-        self.ros_thread = threading.Thread(
-            target=rclpy.spin, args=(self.ros_subscriber,), daemon=True
-        )
+        self.ros_thread = threading.Thread(target=rclpy.spin, args=(self.ros_subscriber,), daemon=True)
         self.ros_thread.start()
 
     def receive_data(self, msg):
