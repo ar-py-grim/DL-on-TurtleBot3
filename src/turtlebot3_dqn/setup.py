@@ -12,13 +12,9 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', 'turtlebot3_dqn_stage1.launch.py'))),
-        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', 'turtlebot3_dqn_stage2.launch.py'))),
-        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', 'turtlebot3_dqn_stage3.launch.py'))),
-        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', 'turtlebot3_dqn_stage4.launch.py'))),
-        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', 'turtlebot3_results.launch.py'))),
-        ('share/' + package_name + '/model', glob.glob(os.path.join('model', '*.h5'))),
-        ('share/' + package_name + '/model', glob.glob(os.path.join('model', '*.json'))),
+        ('share/' + package_name + '/launch', glob.glob('launch/*.py')),
+        # ('share/' + package_name + '/model', glob.glob(os.path.join('model', '*.h5'))),
+        # ('share/' + package_name + '/model', glob.glob(os.path.join('model', '*.json'))),
     ],
     
     install_requires=['setuptools','launch'],
