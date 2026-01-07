@@ -39,7 +39,8 @@ class DDQNTest(Node):
 
         self.load_model = True
         self.load_episode = int(load_episode)
-        self.model_dir_path = os.path.join('/home/grim/turtlebot3_ws/src/turtlebot3_dqn','model')
+        self.model_dir_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'model')
         
         print(f"dir path: {self.model_dir_path}")
 
