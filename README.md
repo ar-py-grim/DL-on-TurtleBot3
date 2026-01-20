@@ -13,6 +13,7 @@ To run the desired turtlebot model source the below line in your .bashrc file
 ```sh
 export TURTLEBOT3_MODEL=burger
 ```
+<img width="1824" height="749" alt="Screenshot from 2026-01-20 17-34-53" src="https://github.com/user-attachments/assets/ff13ddb5-5dcb-4fc0-a7b6-c31135843bfb" />
 
 ## To run the project
 
