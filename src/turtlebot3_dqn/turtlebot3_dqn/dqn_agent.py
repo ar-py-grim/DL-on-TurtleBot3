@@ -96,7 +96,7 @@ class DQNAgent(Node):
         self.target_update_after_counter = 0
 
         self.load_model = True
-        self.load_episode = 800
+        self.load_episode = 600
         self.model_dir_path = os.path.join(os.path.dirname(
                 os.path.dirname(os.path.realpath(__file__))),'model')
         self.model_path = os.path.join(self.model_dir_path,'stage' + str(self.stage) + 
@@ -339,8 +339,8 @@ class DQNAgent(Node):
 def main(args=None):
     if args is None:
         args = sys.argv
-    stage_num = args[1] if len(args) > 1 else '2'
-    max_training_episodes = args[2] if len(args) > 2 else '1000'
+    stage_num = args[1] if len(args) > 1 else '1'
+    max_training_episodes = args[2] if len(args) > 2 else '600'
     rclpy.init(args=args)
 
     dqn_agent = DQNAgent(stage_num, max_training_episodes)
