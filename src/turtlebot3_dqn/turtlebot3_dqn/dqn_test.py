@@ -43,7 +43,7 @@ class DQNTest(Node):
 
         model_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-            'model',
+            'saved_model',
             f'stage{self.stage}_episode{self.load_episode}.h5'
         )
         self.model = load_model(model_path)
@@ -97,7 +97,6 @@ def main(args=None):
     stage = sys.argv[1] if len(sys.argv) > 1 else '1'
     load_episode = sys.argv[2] if len(sys.argv) > 2 else '600'
     node = DQNTest(stage, load_episode)
-
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

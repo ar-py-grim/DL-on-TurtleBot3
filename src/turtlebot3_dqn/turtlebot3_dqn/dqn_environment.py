@@ -1,5 +1,4 @@
-#!/dl_env/bin/env python3
-
+#!/usr/bin/env python3
 #################################################################################
 # Copyright 2019 ROBOTIS CO., LTD.
 #

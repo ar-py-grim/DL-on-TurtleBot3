@@ -22,29 +22,33 @@ import datetime
 import json
 import math
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import random
 import sys
 import time
 import numpy
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
+import threading
 from std_msgs.msg import Float32MultiArray
 from std_srvs.srv import Empty
-import tensorflow
+from turtlebot3_msgs.srv import Dqn
+import tensorflow as tf
 from keras.layers import Dense, Input
 from keras.losses import MeanSquaredError
 from keras.models import load_model, Sequential
 from keras.optimizers import Adam
-from turtlebot3_msgs.srv import Dqn
-
-
-# tensorflow.config.set_visible_devices([], 'GPU')
 
 LOGGING = False
 current_time = datetime.datetime.now().strftime('[%mm%dd-%H:%M]')
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    print(f"Memory growth enabled for {len(gpus)} GPU(s)")
 
-
-class DQNMetric(tensorflow.keras.metrics.Metric):
+class DQNMetric(tf.keras.metrics.Metric):
 
     def __init__(self, name='dqn_metric'):
         super(DQNMetric, self).__init__(name=name)
@@ -98,12 +102,12 @@ class DQNAgent(Node):
         self.load_model = True
         self.load_episode = 600
         self.model_dir_path = os.path.join(os.path.dirname(
-                os.path.dirname(os.path.realpath(__file__))),'model')
+                os.path.dirname(os.path.realpath(__file__))),'saved_model')
         self.model_path = os.path.join(self.model_dir_path,'stage' + str(self.stage) + 
                                        '_episode' + str(self.load_episode) + '.h5')
 
         if self.load_model:
-            self.model.set_weights(load_model(self.model_path).get_weights())
+            self.model.set_weights(load_model(self.model_path, compile=False).get_weights())
             with open(os.path.join(
                 self.model_dir_path,
                 'stage' + str(self.stage) + '_episode' + str(self.load_episode) + '.json'
@@ -118,17 +122,15 @@ class DQNAgent(Node):
             dqn_reward_log_dir = os.path.join(
                 home_dir, 'turtlebot3_dqn_logs', 'gradient_tape', tensorboard_file_name
             )
-            self.dqn_reward_writer = tensorflow.summary.create_file_writer(dqn_reward_log_dir)
+            self.dqn_reward_writer = tf.summary.create_file_writer(dqn_reward_log_dir)
             self.dqn_reward_metric = DQNMetric()
 
         self.rl_agent_interface_client = self.create_client(Dqn, 'rl_agent_interface')
         self.make_environment_client = self.create_client(Empty, 'make_environment')
         self.reset_environment_client = self.create_client(Dqn, 'reset_environment')
 
-        self.action_pub = self.create_publisher(Float32MultiArray, '/get_action', 10)
+        self.action_pub = self.create_publisher(Float32MultiArray, 'get_action', 10)
         self.result_pub = self.create_publisher(Float32MultiArray, 'result', 10)
-
-        self.process()
 
     def process(self):
         self.env_make()
@@ -175,7 +177,7 @@ class DQNAgent(Node):
                     if LOGGING:
                         self.dqn_reward_metric.update_state(score)
                         with self.dqn_reward_writer.as_default():
-                            tensorflow.summary.scalar(
+                            tf.summary.scalar(
                                 'dqn_reward', self.dqn_reward_metric.result(), step=episode_num
                             )
                         self.dqn_reward_metric.reset_states()
@@ -211,16 +213,14 @@ class DQNAgent(Node):
     def env_make(self):
         while not self.make_environment_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn(
-                'Environment make client failed to connect to the server, try again ...'
-            )
+                'Environment make client failed to connect to the server, try again ...')
 
         self.make_environment_client.call_async(Empty.Request())
 
     def reset_environment(self):
         while not self.reset_environment_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn(
-                'Reset environment client failed to connect to the server, try again ...'
-            )
+                'Reset environment client failed to connect to the server, try again ...')
 
         future = self.reset_environment_client.call_async(Dqn.Request())
 
@@ -326,8 +326,8 @@ class DQNAgent(Node):
         y_train = numpy.reshape(y_train, [len(data_in_mini_batch), self.action_size])
 
         self.model.fit(
-            tensorflow.convert_to_tensor(x_train, tensorflow.float32),
-            tensorflow.convert_to_tensor(y_train, tensorflow.float32),
+            tf.convert_to_tensor(x_train, tf.float32),
+            tf.convert_to_tensor(y_train, tf.float32),
             batch_size=self.batch_size, verbose=0
         )
         self.target_update_after_counter += 1
@@ -340,14 +340,23 @@ def main(args=None):
     if args is None:
         args = sys.argv
     stage_num = args[1] if len(args) > 1 else '1'
-    max_training_episodes = args[2] if len(args) > 2 else '600'
+    max_training_episodes = args[2] if len(args) > 2 else '1000'
     rclpy.init(args=args)
-
     dqn_agent = DQNAgent(stage_num, max_training_episodes)
-    rclpy.spin(dqn_agent)
 
-    dqn_agent.destroy_node()
-    rclpy.shutdown()
+    executor = MultiThreadedExecutor()
+    executor.add_node(dqn_agent)
+    process_thread = threading.Thread(target=dqn_agent.process)
+    process_thread.start()
+    
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        dqn_agent.destroy_node()
+        rclpy.shutdown()
+        process_thread.join()
 
 
 if __name__ == '__main__':
