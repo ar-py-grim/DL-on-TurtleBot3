@@ -1,7 +1,12 @@
 #!/dl_env/bin/env python3
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
+
 print("TensorFlow version:", tf.__version__)
+print(tf.sysconfig.get_build_info())
+
 for device in tf.config.list_physical_devices():
     print(f"  {device}")
     if device.device_type == 'GPU':
