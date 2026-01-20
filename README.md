@@ -1,4 +1,4 @@
-# DL-on-TurtleBot3
+# RL on TurtleBot3
 DQN and DDQN algo on turtlebot3
 
 # Software versions
