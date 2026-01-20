@@ -102,7 +102,7 @@ class DQNAgent(Node):
         self.load_model = True
         self.load_episode = 600
         self.model_dir_path = os.path.join(os.path.dirname(
-                os.path.dirname(os.path.realpath(__file__))),'saved_model')
+                os.path.dirname(os.path.realpath(__file__))),'model')
         self.model_path = os.path.join(self.model_dir_path,'stage' + str(self.stage) + 
                                        '_episode' + str(self.load_episode) + '.h5')
 
